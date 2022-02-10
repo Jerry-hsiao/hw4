@@ -82,14 +82,18 @@
     <DetailModal :temp-product="tempProduct" />
     <!--end -->
     <!-- DleteModal head -->
-    <DeleteModal :productId="productId" @get-products="getProducts" />
+    <DeleteModal
+      :temp-product="tempProduct"
+      @get-products="getProducts"
+      :delete-modal="deleteModal"
+    />
     <!-- DleteModal end -->
 
     <!-- UpdateOrAddModal head -->
     <AddEditModal
       :edit-or-add-product="editOrAddProduct"
-      :product-id="productId"
       :add-product="addProduct"
+      :product-modal="productModal"
       @get-products="getProducts"
     />
     <!-- UpdateOrAddModal end -->
@@ -113,7 +117,6 @@ export default {
       editOrAddProduct: {
         imagesUrl: [],
       },
-      productId: "",
       sortBy: "price",
       ascending: true,
       deleteModal: null,
@@ -157,8 +160,6 @@ export default {
       this.detailModal.show();
     },
     getProducts(page = 1) {
-      this.productModal.hide();
-      this.deleteModal.hide();
       this.axios
         .get(`${this.url}/api/${this.path}/admin/products/?page=${page}`)
         .then((res) => {
@@ -178,13 +179,11 @@ export default {
         };
         this.productModal.show();
       } else if (control == "edit") {
-        this.productId = item.id;
         this.editOrAddProduct = { ...item };
         this.addProduct = false;
-        console.log(this.productModal, "outside");
         this.productModal.show();
       } else if (control == "delete") {
-        this.productId = item.id;
+        this.tempProduct = { ...item };
         this.deleteModal.show();
       }
     },

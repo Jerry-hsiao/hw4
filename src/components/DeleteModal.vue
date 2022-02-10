@@ -49,15 +49,18 @@ export default {
       path: "hexschooljerry", // 請加入個人 API Path
     };
   },
-  props: ["productId"],
+  props: ["tempProduct", "deleteModal"],
   methods: {
     deleteProduct() {
       this.axios
-        .delete(`${this.url}/api/${this.path}/admin/product/${this.productId}`)
+        .delete(
+          `${this.url}/api/${this.path}/admin/product/${this.tempProduct.id}`
+        )
         .then((res) => {
           //   this.deleteAlert(res.data.message, "success");
           alert(res.data.message);
           this.$emit("get-products");
+          this.deleteModal.hide();
         })
         .catch((er) => {
           alert(er.response.data.message);

@@ -210,24 +210,25 @@ export default {
     return {
       url: "https://vue3-course-api.hexschool.io/v2", // 請加入站點
       path: "hexschooljerry", // 請加入個人 API Path
-      productModal: null,
     };
   },
-  props: ["editOrAddProduct", "productId", "addProduct"],
+  props: ["editOrAddProduct", "addProduct", "productModal"],
   methods: {
     updateProduct() {
       let url = `${this.url}/api/${this.path}/admin/product`;
       let http = "post";
       if (!this.addProduct) {
-        url = `${this.url}/api/${this.path}/admin/product/${this.productId}`;
+        url = `${this.url}/api/${this.path}/admin/product/${this.editOrAddProduct.id}`;
         http = "put";
       }
       this.axios[http](url, { data: this.editOrAddProduct })
         .then((response) => {
           alert(response.data.message);
           this.$emit("get-products");
+          this.productModal.hide();
         })
         .catch((err) => {
+          console.log(err);
           alert(err.response.data.message);
         });
     },
